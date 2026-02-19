@@ -1,8 +1,8 @@
 
+import { ArrowUpRight, Bookmark, Command, FolderInput, Keyboard } from 'lucide-react';
 import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import { CONTRIBUTORS, SOCIAL_LINKS } from '../constants';
-import { ArrowUpRight, Bookmark, FolderInput, Command, Keyboard } from 'lucide-react';
 
 export function Contributors(): JSX.Element {
   const [shortcut, setShortcut] = useState({ key: 'CTRL', symbol: 'D' });
@@ -29,20 +29,20 @@ export function Contributors(): JSX.Element {
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        {/* Community Contributors */}
+        {/* Contributors */}
         <div className="flex flex-col items-center justify-center mb-16">
-          <p className="text-zinc-500 text-sm font-medium mb-6 uppercase tracking-wider">Community Contributors</p>
+          <p className="text-zinc-500 text-sm font-medium mb-6 uppercase tracking-wider">Contributors</p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
             {CONTRIBUTORS.map((c, i) => (
-              <div key={i} className="group/avatar relative">
-                <div className="w-10 h-10 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 transition-all duration-300 group-hover/avatar:scale-110 group-hover/avatar:border-zinc-500 cursor-default">
+              <a key={i} href={c.url} target="_blank" rel="noopener noreferrer" className="group/avatar relative cursor-pointer">
+                <div className="w-10 h-10 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 transition-all duration-300 group-hover/avatar:scale-110 group-hover/avatar:border-zinc-500">
                   <img src={c.avatar} alt={c.name} className="w-full h-full object-cover grayscale group-hover/avatar:grayscale-0 transition-all" />
                 </div>
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-zinc-800 text-white text-[10px] rounded opacity-0 group-hover/avatar:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-zinc-700">
                   {c.name}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
