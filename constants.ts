@@ -8,11 +8,11 @@ export const SOCIAL_LINKS = {
 };
 
 export const CONTRIBUTORS = [
-  { name: "Ahmed Ali", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Ahmed" },
-  { name: "Sara Smith", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Sara" },
-  { name: "Omar Khaleel", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Omar" },
-  { name: "Huda Ben", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Huda" },
-  { name: "Karim Zayd", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Karim" },
+  { name: "Ahmed Ali", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Ahmed", url: "https://example.com/ahmed" },
+  { name: "Sara Smith", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Sara", url: "https://example.com/sara" },
+  { name: "Omar Khaleel", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Omar", url: "https://example.com/omar" },
+  { name: "Huda Ben", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Huda", url: "https://example.com/huda" },
+  { name: "Karim Zayd", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Karim", url: "https://example.com/karim" },
 ];
 
 export const BANKS: Bank[] = [
@@ -20,6 +20,7 @@ export const BANKS: Bank[] = [
     id: 'wahda-bank',
     name: 'Wahda Bank',
     logoUrl: '/logos/banks/wahda-bank.svg',
+    logomarkUrl: '/logos/bank-icons/wahda-bank.svg',
     colors: ['#034694', '#27AAE2', '#1A75BC'],
     hasScreenshots: true,
     type: 'bank',
@@ -29,6 +30,7 @@ export const BANKS: Bank[] = [
     id: 'sahara-bank',
     name: 'Sahara Bank',
     logoUrl: '/logos/banks/sahara-bank.svg',
+    logomarkUrl: '/logos/bank-icons/sahara-bank.svg',
     colors: ['#002C4B', '#A77B18'],
     hasScreenshots: true,
     isNew: true,
@@ -39,6 +41,7 @@ export const BANKS: Bank[] = [
     id: 'yaqqen-bank',
     name: 'Yaqqen Bank',
     logoUrl: '/logos/banks/yaqqen-bank.svg',
+    logomarkUrl: '/logos/bank-icons/yaqqen-bank.svg',
     colors: ['#C6872F', '#884B39'],
     hasScreenshots: false,
     type: 'bank'
@@ -47,6 +50,7 @@ export const BANKS: Bank[] = [
     id: 'north-bank',
     name: 'North Africa Bank',
     logoUrl: '/logos/banks/north-bank.svg',
+    logomarkUrl: '/logos/bank-icons/north-bank.svg',
     colors: ['#0055B8', '#E87200'],
     hasScreenshots: true,
     type: 'bank'
@@ -55,6 +59,7 @@ export const BANKS: Bank[] = [
     id: 'bcd-bank',
     name: 'Commerce & Development Bank',
     logoUrl: '/logos/banks/bcd-bank.svg',
+    logomarkUrl: '/logos/bank-icons/bcd-bank.svg',
     colors: ['#007F3E', '#FFC80F'],
     hasScreenshots: false,
     type: 'bank'
@@ -63,6 +68,7 @@ export const BANKS: Bank[] = [
     id: 'atib-bank',
     name: 'ATIB Bank',
     logoUrl: '/logos/banks/atib-bank.svg',
+    logomarkUrl: '/logos/bank-icons/atib-bank.svg',
     colors: ['#E30E2D'],
     hasScreenshots: false,
     type: 'bank'
@@ -71,6 +77,7 @@ export const BANKS: Bank[] = [
     id: 'daman-islamic-bank',
     name: 'Daman Islamic Bank',
     logoUrl: '/logos/banks/daman-islamic-bank.svg',
+    logomarkUrl: '/logos/bank-icons/daman-islamic-bank.svg',
     colors: ['#4338CA', '#6366F1'],
     hasScreenshots: false,
     type: 'bank'
@@ -79,6 +86,7 @@ export const BANKS: Bank[] = [
     id: 'group-bank',
     name: 'Group Bank',
     logoUrl: '/logos/banks/group-bank.svg',
+    logomarkUrl: '/logos/bank-icons/group-bank.svg',
     colors: ['#0CA9E8'],
     hasScreenshots: false,
     type: 'bank'
@@ -87,6 +95,7 @@ export const BANKS: Bank[] = [
     id: 'investment-bank',
     name: 'Investment Bank',
     logoUrl: '/logos/banks/investment-bank.svg',
+    logomarkUrl: '/logos/bank-icons/investment-bank.svg',
     colors: ['#DE4148'],
     hasScreenshots: false,
     type: 'bank'
@@ -95,6 +104,7 @@ export const BANKS: Bank[] = [
     id: 'islamic-bank',
     name: 'Islamic Bank',
     logoUrl: '/logos/banks/islamic-bank.svg',
+    logomarkUrl: '/logos/bank-icons/islamic-bank.svg',
     colors: ['#735D46', '#897852'],
     hasScreenshots: false,
     type: 'bank'
@@ -103,6 +113,7 @@ export const BANKS: Bank[] = [
     id: 'tadamun-bank',
     name: 'Tadamun Bank',
     logoUrl: '/logos/banks/tadamun-bank.svg',
+    logomarkUrl: '/logos/bank-icons/tadamun-bank.svg',
     colors: ['#155957', '#21B5E9', '#B5D339'],
     hasScreenshots: false,
     type: 'bank'
@@ -111,6 +122,7 @@ export const BANKS: Bank[] = [
     id: 'united-bank',
     name: 'United Bank',
     logoUrl: '/logos/banks/united-bank.svg',
+    logomarkUrl: '/logos/bank-icons/united-bank.svg',
     colors: ['#304365'],
     hasScreenshots: false,
     type: 'bank'
