@@ -91,8 +91,8 @@ function AppCard({ app }: { app: Bank }): JSX.Element {
 
       {/* Meta Info */}
       <div className="flex items-center gap-3 px-1">
-        <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-border overflow-hidden flex-shrink-0 p-0.5">
-          <img src={app.logoUrl} alt={app.name} className="w-full h-full object-contain rounded-lg" />
+        <div className="rounded-xl bg-zinc-900 border border-border overflow-hidden flex-shrink-0 p-2">
+          <img src={app.logoUrl} alt={app.name} className="w-8 h-8 object-contain" />
         </div>
         <div className="flex flex-col">
           <h3 className="text-sm font-semibold text-zinc-100 leading-tight group-hover:underline decoration-zinc-600 underline-offset-4">{app.name}</h3>
