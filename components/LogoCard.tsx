@@ -1,15 +1,15 @@
 
-import React, { useContext } from 'react';
-import { Bank, PaymentMethod, UIContextType } from '../types';
+import type { JSX } from 'react';
+import { Bank, PaymentMethod } from '../types';
 import { Badge } from './Badge';
-import { UIContext } from '../App';
+import { useUIContext } from '../hooks/useUIContext';
 
 interface LogoCardProps {
   item: Bank | PaymentMethod;
 }
 
-export const LogoCard: React.FC<LogoCardProps> = ({ item }) => {
-  const { setSelectedItem, selectedItem } = useContext(UIContext) as UIContextType;
+export function LogoCard({ item }: LogoCardProps): JSX.Element {
+  const { setSelectedItem, selectedItem } = useUIContext();
 
   const isSelected = selectedItem?.id === item.id;
 
@@ -20,7 +20,7 @@ export const LogoCard: React.FC<LogoCardProps> = ({ item }) => {
         className={`
           relative w-full aspect-square flex flex-col items-center justify-center p-6
           border rounded-xl transition-all duration-200
-          hover:bg-zinc-900/50 
+          hover:bg-zinc-900/50
           ${isSelected ? 'border-zinc-500 ring-1 ring-zinc-500 bg-zinc-900' : 'border-border bg-background hover:border-zinc-600'}
         `}
       >
@@ -32,10 +32,10 @@ export const LogoCard: React.FC<LogoCardProps> = ({ item }) => {
 
         {/* Logo Container */}
         <div className="w-full h-20 flex items-center justify-center transition-all duration-300">
-          <img 
-            src={item.logoUrl} 
-            alt={item.name} 
-            className="max-w-full max-h-full object-contain" 
+          <img
+            src={item.logoUrl}
+            alt={item.name}
+            className="max-w-full max-h-full object-contain"
           />
         </div>
       </button>
@@ -45,4 +45,4 @@ export const LogoCard: React.FC<LogoCardProps> = ({ item }) => {
       </span>
     </div>
   );
-};
+}

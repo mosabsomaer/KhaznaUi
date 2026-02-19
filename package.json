@@ -9,15 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "jszip": "3.10.1",
+    "lucide-react": "0.436.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router": "6.26.1",
-    "react-router-dom": "6.26.1",
-    "lucide-react": "0.436.0",
-    "jszip": "3.10.1"
+    "react-router-dom": "6.26.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@types/react": "^19.2.14",
     "@vitejs/plugin-react": "^5.0.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"

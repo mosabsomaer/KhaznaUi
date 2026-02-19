@@ -1,4 +1,4 @@
-export const downloadBlob = (blob: Blob, filename: string) => {
+export function downloadBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
@@ -7,20 +7,19 @@ export const downloadBlob = (blob: Blob, filename: string) => {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
-};
+}
 
-export const convertSvgToImage = (
-  svgString: string, 
-  width: number, 
-  height: number, 
+export function convertSvgToImage(
+  svgString: string,
+  width: number,
+  height: number,
   format: 'image/png' | 'image/webp'
-): Promise<string> => {
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
 
-    // Set explicit dimensions
     canvas.width = width;
     canvas.height = height;
 
@@ -28,18 +27,16 @@ export const convertSvgToImage = (
     const url = URL.createObjectURL(svgBlob);
 
     img.onload = () => {
-      if (ctx) {
-        // Clear canvas
-        ctx.clearRect(0, 0, width, height);
-        // Draw image
-        ctx.drawImage(img, 0, 0, width, height);
-        // Convert to data URL
-        const dataUrl = canvas.toDataURL(format);
-        URL.revokeObjectURL(url);
-        resolve(dataUrl);
-      } else {
+      if (!ctx) {
         reject(new Error('Could not get canvas context'));
+        return;
       }
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL(format);
+      URL.revokeObjectURL(url);
+      resolve(dataUrl);
     };
 
     img.onerror = (e) => {
@@ -49,4 +46,4 @@ export const convertSvgToImage = (
 
     img.src = url;
   });
-};
+}

@@ -1,26 +1,26 @@
 
-import React, { useState, createContext, useMemo, useCallback, useEffect } from 'react';
-import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
+import type { JSX } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { Contributors } from './components/Contributors';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
-import { HomePage } from './pages/HomePage';
-import { AppsPage } from './pages/AppsPage';
+import { useUIContext } from './hooks/useUIContext';
 import { AppDetailPage } from './pages/AppDetailPage';
-import { Contributors } from './components/Contributors';
-import { UIContextType, SelectedItem } from './types';
+import { AppsPage } from './pages/AppsPage';
+import { HomePage } from './pages/HomePage';
+import { SelectedItem, UIContextType } from './types';
 
-// Context definition
 export const UIContext = createContext<UIContextType | null>(null);
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isSidebarOpen, closeSidebar } = React.useContext(UIContext) as UIContextType;
+function Layout({ children }: { children: React.ReactNode }): JSX.Element {
+  const { isSidebarOpen, closeSidebar } = useUIContext();
   const location = useLocation();
 
-  // Close sidebar automatically when route changes
   useEffect(() => {
     closeSidebar();
   }, [location.pathname, closeSidebar]);
-  
+
   return (
     <div className="min-h-screen bg-background text-zinc-100 flex flex-col">
       <Navbar />
@@ -33,22 +33,22 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Sidebar />
     </div>
   );
-};
+}
 
-// Scroll to top component
-const ScrollToTop = () => {
+function ScrollToTop(): null {
   const { pathname } = useLocation();
-  React.useEffect(() => {
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
   return null;
 }
 
-const App: React.FC = () => {
+function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItemState] = useState<SelectedItem>(null);
-  
-  // Sidebar logic derived from selection
+
   const isSidebarOpen = !!selectedItem;
 
   const setSelectedItem = useCallback((item: SelectedItem) => {
@@ -59,19 +59,14 @@ const App: React.FC = () => {
     setSelectedItemState(null);
   }, []);
 
-  const toggleSidebar = useCallback(() => {
-    setSelectedItemState(current => current ? null : current);
-  }, []);
-
-  const contextValue = useMemo(() => ({
+  const contextValue = useMemo<UIContextType>(() => ({
     searchQuery,
     setSearchQuery,
     selectedItem,
     setSelectedItem,
     isSidebarOpen,
-    toggleSidebar,
-    closeSidebar
-  }), [searchQuery, selectedItem, isSidebarOpen, setSelectedItem, toggleSidebar, closeSidebar]);
+    closeSidebar,
+  }), [searchQuery, selectedItem, isSidebarOpen, setSelectedItem, closeSidebar]);
 
   return (
     <UIContext.Provider value={contextValue}>
@@ -87,6 +82,6 @@ const App: React.FC = () => {
       </MemoryRouter>
     </UIContext.Provider>
   );
-};
+}
 
 export default App;

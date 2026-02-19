@@ -1,20 +1,7 @@
 
 export type ItemType = 'bank' | 'payment_method';
 
-export interface Bank {
-  id: string;
-  name: string;
-  logoUrl: string; // Using placeholder URLs for demo
-  colors: string[];
-  hasScreenshots: boolean;
-  isNew?: boolean;
-  isUpdated?: boolean;
-  website?: string;
-  figmaUrl?: string;
-  type: 'bank';
-}
-
-export interface PaymentMethod {
+export interface BaseEntity {
   id: string;
   name: string;
   logoUrl: string;
@@ -22,6 +9,15 @@ export interface PaymentMethod {
   isNew?: boolean;
   isUpdated?: boolean;
   figmaUrl?: string;
+}
+
+export interface Bank extends BaseEntity {
+  hasScreenshots: boolean;
+  website?: string;
+  type: 'bank';
+}
+
+export interface PaymentMethod extends BaseEntity {
   type: 'payment_method';
 }
 
@@ -40,6 +36,5 @@ export interface UIContextType {
   selectedItem: SelectedItem;
   setSelectedItem: (item: SelectedItem) => void;
   isSidebarOpen: boolean;
-  toggleSidebar: () => void;
   closeSidebar: () => void;
 }
