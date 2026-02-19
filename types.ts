@@ -5,6 +5,7 @@ export interface BaseEntity {
   id: string;
   name: string;
   logoUrl: string;
+  logomarkUrl?: string;
   colors: string[];
   isNew?: boolean;
   isUpdated?: boolean;
@@ -30,6 +31,8 @@ export interface Screenshot {
 
 export type SelectedItem = Bank | PaymentMethod | null;
 
+export type LogoVariant = 'mono' | 'branded' | 'logomark';
+
 export interface UIContextType {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -37,4 +40,7 @@ export interface UIContextType {
   setSelectedItem: (item: SelectedItem) => void;
   isSidebarOpen: boolean;
   closeSidebar: () => void;
+  logoVariant: LogoVariant;
+  setLogoVariant: (variant: LogoVariant) => void;
+  getLogoUrl: (item: BaseEntity) => string;
 }

@@ -9,7 +9,7 @@ import { useUIContext } from './hooks/useUIContext';
 import { AppDetailPage } from './pages/AppDetailPage';
 import { AppsPage } from './pages/AppsPage';
 import { HomePage } from './pages/HomePage';
-import { SelectedItem, UIContextType } from './types';
+import { BaseEntity, LogoVariant, SelectedItem, UIContextType } from './types';
 
 export const UIContext = createContext<UIContextType | null>(null);
 
@@ -48,6 +48,7 @@ function ScrollToTop(): null {
 function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItemState] = useState<SelectedItem>(null);
+  const [logoVariant, setLogoVariant] = useState<LogoVariant>('branded');
 
   const isSidebarOpen = !!selectedItem;
 
@@ -59,6 +60,11 @@ function App(): JSX.Element {
     setSelectedItemState(null);
   }, []);
 
+  const getLogoUrl = useCallback((item: BaseEntity): string => {
+    if (logoVariant === 'logomark' && item.logomarkUrl) return item.logomarkUrl;
+    return item.logoUrl;
+  }, [logoVariant]);
+
   const contextValue = useMemo<UIContextType>(() => ({
     searchQuery,
     setSearchQuery,
@@ -66,7 +72,10 @@ function App(): JSX.Element {
     setSelectedItem,
     isSidebarOpen,
     closeSidebar,
-  }), [searchQuery, selectedItem, isSidebarOpen, setSelectedItem, closeSidebar]);
+    logoVariant,
+    setLogoVariant,
+    getLogoUrl,
+  }), [searchQuery, selectedItem, isSidebarOpen, setSelectedItem, closeSidebar, logoVariant, getLogoUrl]);
 
   return (
     <UIContext.Provider value={contextValue}>
