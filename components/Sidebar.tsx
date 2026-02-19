@@ -45,21 +45,29 @@ function ColorPill({ color }: { color: string }): JSX.Element {
   );
 }
 
+function makeMonoSvg(svg: string): string {
+  return svg
+    .replace(/fill="(?!none)[^"]*"/g, 'fill="white"')
+    .replace(/stroke="(?!none)[^"]*"/g, 'stroke="white"');
+}
+
 export function Sidebar(): JSX.Element | null {
-  const { selectedItem, isSidebarOpen, closeSidebar } = useUIContext();
+  const { selectedItem, isSidebarOpen, closeSidebar, logoVariant, getLogoUrl } = useUIContext();
   const [activeTab, setActiveTab] = useState<'download' | 'code'>('download');
   const [codeFormat, setCodeFormat] = useState('React');
   const [copied, setCopied] = useState(false);
   const [svgContent, setSvgContent] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
+  const resolvedUrl = selectedItem ? getLogoUrl(selectedItem) : '';
+
   useEffect(() => {
     async function fetchSvg(): Promise<void> {
-      if (!selectedItem) return;
+      if (!resolvedUrl) return;
 
       try {
-        if (selectedItem.logoUrl.endsWith('.svg')) {
-          const response = await fetch(selectedItem.logoUrl);
+        if (resolvedUrl.endsWith('.svg')) {
+          const response = await fetch(resolvedUrl);
           const text = await response.text();
           setSvgContent(text);
         } else {
@@ -74,12 +82,17 @@ export function Sidebar(): JSX.Element | null {
     fetchSvg();
     setCopied(false);
     setIsProcessing(null);
-  }, [selectedItem]);
+  }, [resolvedUrl]);
+
+  const activeSvg = useMemo(() => {
+    if (!svgContent) return '';
+    return logoVariant === 'mono' ? makeMonoSvg(svgContent) : svgContent;
+  }, [svgContent, logoVariant]);
 
   const generatedCode = useMemo(() => {
-    if (!svgContent || !selectedItem) return '';
-    return generateCode(codeFormat, svgContent, selectedItem.name);
-  }, [svgContent, codeFormat, selectedItem]);
+    if (!activeSvg || !selectedItem) return '';
+    return generateCode(codeFormat, activeSvg, selectedItem.name);
+  }, [activeSvg, codeFormat, selectedItem]);
 
   function handleCopy(): void {
     navigator.clipboard.writeText(generatedCode);
@@ -88,18 +101,19 @@ export function Sidebar(): JSX.Element | null {
   }
 
   async function handleDownload(format: string): Promise<void> {
-    if (!selectedItem || !svgContent || isProcessing) return;
+    if (!selectedItem || !activeSvg || isProcessing) return;
 
     setIsProcessing(format);
-    const filename = `${selectedItem.id}-${selectedItem.name.toLowerCase().replace(/\s+/g, '-')}`;
+    const variantSuffix = logoVariant !== 'branded' ? `-${logoVariant}` : '';
+    const filename = `${selectedItem.id}-${selectedItem.name.toLowerCase().replace(/\s+/g, '-')}${variantSuffix}`;
 
     try {
       if (format === 'SVG') {
-        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+        const blob = new Blob([activeSvg], { type: 'image/svg+xml' });
         downloadBlob(blob, `${filename}.svg`);
       } else {
         const mimeType = format === 'PNG' ? 'image/png' : 'image/webp';
-        const dataUrl = await convertSvgToImage(svgContent, 1024, 1024, mimeType);
+        const dataUrl = await convertSvgToImage(activeSvg, 1024, 1024, mimeType);
         const res = await fetch(dataUrl);
         const blob = await res.blob();
         downloadBlob(blob, `${filename}.${format.toLowerCase()}`);
@@ -147,9 +161,11 @@ export function Sidebar(): JSX.Element | null {
             />
 
             <img
-              src={selectedItem.logoUrl}
+              src={resolvedUrl}
               alt={selectedItem.name}
-              className="relative z-10 w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
+              className={`relative z-10 w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 ${
+                logoVariant === 'mono' ? 'brightness-0 invert' : ''
+              }`}
             />
           </div>
 
