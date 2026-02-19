@@ -11,6 +11,7 @@ export function Navbar(): JSX.Element {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isAppsPage = location.pathname.includes('/apps');
+  const isHomePage = location.pathname === '/';
   const searchPlaceholder = isAppsPage ? 'Search apps...' : 'Search logos...';
 
   function handleMobileNav(): void {
@@ -45,19 +46,21 @@ export function Navbar(): JSX.Element {
           </nav>
         </div>
 
-        {/* Center: Search (Desktop) */}
-        <div className="flex-1 max-w-md hidden md:block">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 h-4 w-4" />
-            <input
-              type="text"
-              placeholder={searchPlaceholder}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-10 rounded-lg bg-zinc-900 border border-border pl-10 pr-4 text-sm text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-700 transition-all"
-            />
+        {/* Center: Search (Desktop) - hidden on homepage */}
+        {!isHomePage && (
+          <div className="flex-1 max-w-md hidden md:block">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 h-4 w-4" />
+              <input
+                type="text"
+                placeholder={searchPlaceholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-10 rounded-lg bg-zinc-900 border border-border pl-10 pr-4 text-sm text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-700 transition-all"
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Right: Actions (Desktop) */}
         <div className="hidden md:flex items-center gap-2">
