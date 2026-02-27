@@ -1,6 +1,6 @@
 
 import type { JSX } from 'react';
-import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { Contributors } from './components/Contributors';
 import { Navbar } from './components/Navbar';
@@ -9,7 +9,7 @@ import { useUIContext } from './hooks/useUIContext';
 import { AppDetailPage } from './pages/AppDetailPage';
 import { AppsPage } from './pages/AppsPage';
 import { HomePage } from './pages/HomePage';
-import { BaseEntity, LogoVariant, SelectedItem, UIContextType } from './types';
+import { BaseEntity, LogoVariant, SelectedItem, Theme, UIContextType } from './types';
 
 export const UIContext = createContext<UIContextType | null>(null);
 
@@ -22,9 +22,9 @@ function Layout({ children }: { children: React.ReactNode }): JSX.Element {
   }, [location.pathname, closeSidebar]);
 
   return (
-    <div className="min-h-screen bg-background text-zinc-100 flex flex-col">
+    <div className="min-h-screen bg-background text-primary flex flex-col">
       <Navbar />
-      <div className={`relative transition-all duration-300 flex-1 flex flex-col ${isSidebarOpen ? 'md:mr-[400px]' : ''}`}>
+      <div className={`relative transition-all duration-300 flex-1 flex flex-col ${isSidebarOpen ? 'md:me-[400px]' : ''}`}>
         <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1">
           {children}
         </main>
@@ -49,6 +49,12 @@ function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItemState] = useState<SelectedItem>(null);
   const [logoVariant, setLogoVariant] = useState<LogoVariant>('branded');
+  const [theme, setTheme] = useState<Theme>(() => {
+    return (localStorage.getItem('khazna-theme') as Theme) || 'light';
+  });
+
+  const slideRef = useRef<HTMLDivElement>(null);
+  const isAnimating = useRef(false);
 
   const isSidebarOpen = !!selectedItem;
 
@@ -65,6 +71,55 @@ function App(): JSX.Element {
     return item.logoUrl;
   }, [logoVariant]);
 
+  // Sync theme class to <html> and localStorage
+  useEffect(() => {
+    const html = document.documentElement;
+    if (theme === 'dark') {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem('khazna-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+
+    const el = slideRef.current;
+    if (!el) {
+      setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+      isAnimating.current = false;
+      return;
+    }
+
+    // Set the block color to the INCOMING theme's background
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    el.style.backgroundColor = nextTheme === 'dark' ? '#080808' : '#ffffff';
+
+    // Phase 1: cover
+    el.className = 'slide-block phase-cover';
+
+    const onCoverEnd = () => {
+      el.removeEventListener('animationend', onCoverEnd);
+      // Switch theme at midpoint
+      setTheme(nextTheme);
+
+      // Phase 2: reveal
+      requestAnimationFrame(() => {
+        el.className = 'slide-block phase-reveal';
+
+        const onRevealEnd = () => {
+          el.removeEventListener('animationend', onRevealEnd);
+          el.className = 'slide-block';
+          isAnimating.current = false;
+        };
+        el.addEventListener('animationend', onRevealEnd);
+      });
+    };
+    el.addEventListener('animationend', onCoverEnd);
+  }, [theme]);
+
   const contextValue = useMemo<UIContextType>(() => ({
     searchQuery,
     setSearchQuery,
@@ -75,7 +130,9 @@ function App(): JSX.Element {
     logoVariant,
     setLogoVariant,
     getLogoUrl,
-  }), [searchQuery, selectedItem, isSidebarOpen, setSelectedItem, closeSidebar, logoVariant, getLogoUrl]);
+    theme,
+    toggleTheme,
+  }), [searchQuery, selectedItem, isSidebarOpen, setSelectedItem, closeSidebar, logoVariant, getLogoUrl, theme, toggleTheme]);
 
   return (
     <UIContext.Provider value={contextValue}>
@@ -89,6 +146,7 @@ function App(): JSX.Element {
           </Routes>
         </Layout>
       </MemoryRouter>
+      <div ref={slideRef} className="slide-block" />
     </UIContext.Provider>
   );
 }

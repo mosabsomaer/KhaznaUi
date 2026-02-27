@@ -2,9 +2,11 @@
 import { ArrowUpRight, Bookmark, Command, FolderInput, Keyboard } from 'lucide-react';
 import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CONTRIBUTORS, SOCIAL_LINKS } from '../constants';
 
 export function Contributors(): JSX.Element {
+  const { t } = useTranslation();
   const [shortcut, setShortcut] = useState({ key: 'CTRL', symbol: 'D' });
   const [isMobile, setIsMobile] = useState(false);
 
@@ -25,21 +27,21 @@ export function Contributors(): JSX.Element {
 
   return (
     <section className="py-24 border-t border-border/50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-zinc-950/50 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-elevated/50 pointer-events-none" />
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Contributors */}
         <div className="flex flex-col items-center justify-center mb-16">
-          <p className="text-zinc-500 text-sm font-medium mb-6 uppercase tracking-wider">Contributors</p>
+          <p className="text-muted-subtle text-sm font-medium mb-6 uppercase tracking-wider">{t('contributors.contributors')}</p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
             {CONTRIBUTORS.map((c, i) => (
               <a key={i} href={c.url} target="_blank" rel="noopener noreferrer" className="group/avatar relative cursor-pointer">
-                <div className="w-10 h-10 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 transition-all duration-300 group-hover/avatar:scale-110 group-hover/avatar:border-zinc-500">
+                <div className="w-10 h-10 rounded-xl overflow-hidden border border-border bg-surface transition-all duration-300 group-hover/avatar:scale-110 group-hover/avatar:border-border-subtle">
                   <img src={c.avatar} alt={c.name} className="w-full h-full object-cover grayscale group-hover/avatar:grayscale-0 transition-all" />
                 </div>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-zinc-800 text-white text-[10px] rounded opacity-0 group-hover/avatar:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-zinc-700">
+                <div className="absolute bottom-full start-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-surface-hover text-primary text-[10px] rounded opacity-0 group-hover/avatar:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-border-subtle">
                   {c.name}
                 </div>
               </a>
@@ -50,32 +52,32 @@ export function Contributors(): JSX.Element {
         {/* CTA Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Bookmark Card */}
-          <div className="relative bg-zinc-900/40 border border-zinc-800/60 rounded-3xl p-8 md:p-10 overflow-hidden">
+          <div className="relative bg-surface/40 border border-border/60 rounded-3xl p-8 md:p-10 overflow-hidden">
             <div className="relative z-10 flex flex-col h-full items-start">
               <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mb-6 shadow-lg shadow-amber-900/20">
                 <Bookmark size={24} />
               </div>
 
-              <h3 className="text-2xl font-bold text-white mb-3">Don't lose this</h3>
-              <p className="text-zinc-400 leading-relaxed mb-8 max-w-md">
-                This might be the last time we meet. Save the website and bookmark it now to ensure you always have access to these assets.
+              <h3 className="text-2xl font-bold text-primary mb-3">{t('contributors.dontLoseThis')}</h3>
+              <p className="text-muted leading-relaxed mb-8 max-w-md">
+                {t('contributors.bookmarkDescription')}
               </p>
 
               <div className="mt-auto flex items-center gap-3">
                 {!isMobile ? (
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-zinc-500">
-                    {shortcut.key === 'CMD' ? <Command size={12} className="mr-1"/> : <Keyboard size={12} className="mr-1"/>}
-                    <span className="bg-zinc-800 px-1.5 rounded text-zinc-300 border border-zinc-700 min-w-[30px] text-center">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-elevated border border-border text-xs font-mono text-muted-subtle">
+                    {shortcut.key === 'CMD' ? <Command size={12} className="me-1"/> : <Keyboard size={12} className="me-1"/>}
+                    <span className="bg-surface-hover px-1.5 rounded text-muted border border-border-subtle min-w-[30px] text-center">
                       {shortcut.key}
                     </span>
                     <span>+</span>
-                    <span className="bg-zinc-800 px-1.5 rounded text-zinc-300 border border-zinc-700 min-w-[20px] text-center">
+                    <span className="bg-surface-hover px-1.5 rounded text-muted border border-border-subtle min-w-[20px] text-center">
                       {shortcut.symbol}
                     </span>
                   </div>
                 ) : (
-                  <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-500">
-                    Tap share icon to bookmark
+                  <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-elevated border border-border text-xs text-muted-subtle">
+                    {t('contributors.tapShare')}
                   </span>
                 )}
               </div>
@@ -83,22 +85,22 @@ export function Contributors(): JSX.Element {
           </div>
 
           {/* Contribute Card */}
-          <div className="relative bg-zinc-900/40 border border-zinc-800/60 rounded-3xl p-8 md:p-10 overflow-hidden">
+          <div className="relative bg-surface/40 border border-border/60 rounded-3xl p-8 md:p-10 overflow-hidden">
             <div className="relative z-10 flex flex-col h-full items-start">
-              <div className="w-12 h-12 rounded-2xl bg-zinc-800 border border-zinc-700 text-white flex items-center justify-center mb-6 shadow-lg shadow-black/20">
+              <div className="w-12 h-12 rounded-2xl bg-surface-hover border border-border-subtle text-primary flex items-center justify-center mb-6 shadow-lg shadow-black/20">
                 <FolderInput size={24} />
               </div>
 
-              <h3 className="text-2xl font-bold text-white mb-3">Missing something?</h3>
-              <p className="text-zinc-400 leading-relaxed mb-8 max-w-md">
-                Notice a missing bank or outdated logo? Become a contributor and add it to the collection.
+              <h3 className="text-2xl font-bold text-primary mb-3">{t('contributors.missingSomething')}</h3>
+              <p className="text-muted leading-relaxed mb-8 max-w-md">
+                {t('contributors.contributeDescription')}
               </p>
 
               <a
                 href={SOCIAL_LINKS.email}
-                className="mt-auto inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-zinc-200 text-black rounded-full text-sm font-bold transition-colors"
+                className="mt-auto inline-flex items-center gap-2 px-6 py-3 bg-accent-bg hover:opacity-90 text-accent-text rounded-full text-sm font-bold transition-colors"
               >
-                Become a contributor
+                {t('contributors.becomeContributor')}
                 <ArrowUpRight size={16} />
               </a>
             </div>

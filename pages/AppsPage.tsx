@@ -2,12 +2,14 @@ import type { JSX } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { BANKS, MOCK_SCREENSHOTS } from '../constants';
 import { useUIContext } from '../hooks/useUIContext';
 import { Badge } from '../components/Badge';
 import { Bank } from '../types';
 
 function AppCard({ app }: { app: Bank }): JSX.Element {
+  const { t } = useTranslation();
   const screenshots = MOCK_SCREENSHOTS[app.id] || [];
   const screenCount = screenshots.length;
   const hasScreens = screenCount > 0;
@@ -31,10 +33,10 @@ function AppCard({ app }: { app: Bank }): JSX.Element {
       className="group flex flex-col gap-3"
     >
       {/* Card Preview Container */}
-      <div className="relative aspect-[9/19] w-full bg-zinc-900 border border-border rounded-3xl overflow-hidden group-hover:border-zinc-600 transition-all duration-300 shadow-sm hover:shadow-md">
+      <div className="relative aspect-[9/19] w-full bg-surface border border-border rounded-3xl overflow-hidden group-hover:border-border-subtle transition-all duration-300 shadow-sm hover:shadow-md">
 
         {hasScreens ? (
-          <div className="w-full h-full relative bg-zinc-900">
+          <div className="w-full h-full relative bg-surface">
             {screenshots.map((screen, index) => (
               <div
                 key={screen.id}
@@ -52,19 +54,19 @@ function AppCard({ app }: { app: Bank }): JSX.Element {
               <>
                 <button
                   onClick={prevSlide}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 backdrop-blur-sm"
+                  className="absolute start-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 backdrop-blur-sm"
                 >
-                  <ChevronLeft size={16} />
+                  <ChevronLeft size={16} className="rtl:rotate-180" />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 backdrop-blur-sm"
+                  className="absolute end-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 backdrop-blur-sm"
                 >
-                  <ChevronRight size={16} />
+                  <ChevronRight size={16} className="rtl:rotate-180" />
                 </button>
 
                 {/* Dots Indicator */}
-                <div className="absolute bottom-3 left-0 right-0 z-20 flex justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute bottom-3 start-0 end-0 z-20 flex justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   {screenshots.slice(0, 5).map((_, idx) => (
                     <div
                       key={idx}
@@ -77,26 +79,26 @@ function AppCard({ app }: { app: Bank }): JSX.Element {
             )}
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900 p-6 text-center">
+          <div className="w-full h-full flex flex-col items-center justify-center bg-surface p-6 text-center">
             <img src={app.logoUrl} className="w-16 h-16 rounded-xl opacity-20 grayscale mb-4" alt="" />
-            <span className="text-xs text-zinc-600">No screenshots available</span>
+            <span className="text-xs text-dim">{t('common.noScreenshots')}</span>
           </div>
         )}
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 z-30">
+        <div className="absolute top-3 start-3 z-30">
           {app.isUpdated && <Badge type="updated" />}
         </div>
       </div>
 
       {/* Meta Info */}
       <div className="flex items-center gap-3 px-1">
-        <div className="rounded-xl bg-zinc-900 border border-border overflow-hidden flex-shrink-0 p-2">
+        <div className="rounded-xl bg-surface border border-border overflow-hidden flex-shrink-0 p-2">
           <img src={app.logoUrl} alt={app.name} className="w-8 h-8 object-contain" />
         </div>
         <div className="flex flex-col">
-          <h3 className="text-sm font-semibold text-zinc-100 leading-tight group-hover:underline decoration-zinc-600 underline-offset-4">{app.name}</h3>
-          <span className="text-xs text-zinc-500 mt-0.5">{screenCount} Screens</span>
+          <h3 className="text-sm font-semibold text-primary leading-tight group-hover:underline decoration-border-subtle underline-offset-4">{app.name}</h3>
+          <span className="text-xs text-muted-subtle mt-0.5">{screenCount} {t('common.screens')}</span>
         </div>
       </div>
     </Link>
@@ -105,6 +107,7 @@ function AppCard({ app }: { app: Bank }): JSX.Element {
 
 export function AppsPage(): JSX.Element {
   const { searchQuery } = useUIContext();
+  const { t } = useTranslation();
 
   const apps = BANKS.filter(bank =>
     bank.hasScreenshots &&
@@ -114,10 +117,9 @@ export function AppsPage(): JSX.Element {
   return (
     <div className="pb-20">
       <div className="py-12 border-b border-border/50">
-        <h1 className="text-3xl font-bold text-white mb-2">App UI Gallery</h1>
-        <p className="text-zinc-400 max-w-2xl">
-          Explore user interface patterns from real Libyan banking applications.
-          Curated screenshots for research and inspiration.
+        <h1 className="text-3xl font-bold text-primary mb-2">{t('apps.title')}</h1>
+        <p className="text-muted max-w-2xl">
+          {t('apps.description')}
         </p>
       </div>
 
@@ -130,7 +132,7 @@ export function AppsPage(): JSX.Element {
           </div>
         ) : (
           <div className="py-20 text-center">
-            <p className="text-zinc-500">No apps found matching your search.</p>
+            <p className="text-muted-subtle">{t('apps.noAppsFound')}</p>
           </div>
         )}
       </section>

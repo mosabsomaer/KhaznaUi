@@ -33,6 +33,8 @@ export type SelectedItem = Bank | PaymentMethod | null;
 
 export type LogoVariant = 'mono' | 'branded' | 'logomark';
 
+export type Theme = 'light' | 'dark';
+
 export interface UIContextType {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -43,4 +45,6 @@ export interface UIContextType {
   logoVariant: LogoVariant;
   setLogoVariant: (variant: LogoVariant) => void;
   getLogoUrl: (item: BaseEntity) => string;
+  theme: Theme;
+  toggleTheme: () => void;
 }

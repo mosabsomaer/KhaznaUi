@@ -2,6 +2,7 @@
 import type { JSX } from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import { X, Download, Copy, Check, LayoutGrid, FileCode, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useUIContext } from '../hooks/useUIContext';
 import { generateCode } from '../utils/generators';
 import { downloadBlob, convertSvgToImage } from '../utils/download';
@@ -15,6 +16,7 @@ const MOCK_SVG_CONTENT = `<svg width="24" height="24" viewBox="0 0 24 24" fill="
 
 function ColorPill({ color }: { color: string }): JSX.Element {
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
 
   function handleCopy(): void {
     navigator.clipboard.writeText(color);
@@ -36,10 +38,10 @@ function ColorPill({ color }: { color: string }): JSX.Element {
       onClick={handleCopy}
       className="flex items-center justify-center px-4 py-2 rounded-full border border-white/10 shadow-sm transition-all hover:scale-105 active:scale-95"
       style={{ backgroundColor: color }}
-      title="Click to copy HEX"
+      title={t('common.clickToCopy')}
     >
       <span className={`text-xs font-bold font-mono uppercase tracking-wider ${isLight ? 'text-black/80' : 'text-white'}`}>
-        {copied ? 'Copied!' : color}
+        {copied ? t('common.copied') : color}
       </span>
     </button>
   );
@@ -53,6 +55,7 @@ function makeMonoSvg(svg: string): string {
 
 export function Sidebar(): JSX.Element | null {
   const { selectedItem, isSidebarOpen, closeSidebar, logoVariant, getLogoUrl } = useUIContext();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'download' | 'code'>('download');
   const [codeFormat, setCodeFormat] = useState('React');
   const [copied, setCopied] = useState(false);
@@ -120,7 +123,7 @@ export function Sidebar(): JSX.Element | null {
       }
     } catch (e) {
       console.error('Download failed', e);
-      alert('Could not convert image. Try downloading as SVG.');
+      alert(t('sidebar.downloadFailed'));
     } finally {
       setIsProcessing(null);
     }
@@ -130,21 +133,21 @@ export function Sidebar(): JSX.Element | null {
 
   return (
     <aside className={`
-      fixed inset-y-0 right-0 z-50
+      fixed inset-y-0 end-0 z-50
       w-full md:w-[400px]
-      bg-background border-l border-border
+      bg-background border-s border-border
       transform transition-transform duration-300 ease-in-out
       flex flex-col shadow-2xl shadow-black
-      ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
+      ${isSidebarOpen ? 'translate-x-0' : 'ltr:translate-x-full rtl:-translate-x-full'}
     `}>
       {/* Header */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-border bg-background/95 backdrop-blur z-10">
-        <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
-          <LayoutGrid size={14} /> Details
+        <h2 className="text-sm font-semibold text-muted uppercase tracking-wider flex items-center gap-2">
+          <LayoutGrid size={14} /> {t('sidebar.details')}
         </h2>
         <button
           onClick={closeSidebar}
-          className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-full transition-colors outline-none focus:bg-zinc-800"
+          className="p-2 text-muted-subtle hover:text-primary hover:bg-surface-hover rounded-full transition-colors outline-none focus:bg-surface-hover"
         >
           <X size={20} />
         </button>
@@ -153,7 +156,7 @@ export function Sidebar(): JSX.Element | null {
       {selectedItem ? (
         <div className="flex-1 overflow-y-auto custom-scrollbar">
           {/* Preview Area */}
-          <div className="relative aspect-square w-full border-b border-border bg-zinc-900/50 flex items-center justify-center p-12 overflow-hidden group">
+          <div className="relative aspect-square w-full border-b border-border bg-surface/50 flex items-center justify-center p-12 overflow-hidden group">
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                  style={{
                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3Ccircle cx='13' cy='13' r='1'/%3E%3C/g%3E%3C/svg%3E")`
@@ -164,7 +167,7 @@ export function Sidebar(): JSX.Element | null {
               src={resolvedUrl}
               alt={selectedItem.name}
               className={`relative z-10 w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 ${
-                logoVariant === 'mono' ? 'brightness-0 invert' : ''
+                logoVariant === 'mono' ? 'brightness-0 dark:invert' : ''
               }`}
             />
           </div>
@@ -173,9 +176,9 @@ export function Sidebar(): JSX.Element | null {
             {/* Info Header */}
             <div>
               <div className="flex flex-wrap items-center gap-3 mb-4">
-                <h1 className="text-2xl font-bold text-white">{selectedItem.name}</h1>
+                <h1 className="text-2xl font-bold text-primary">{selectedItem.name}</h1>
                 {selectedItem.figmaUrl && (
-                  <FigmaLink href={selectedItem.figmaUrl} tooltipPosition="bottom" className="bg-zinc-800/50" />
+                  <FigmaLink href={selectedItem.figmaUrl} tooltipPosition="bottom" className="bg-surface-hover/50" />
                 )}
               </div>
               <div className="flex flex-wrap gap-2">
@@ -190,19 +193,19 @@ export function Sidebar(): JSX.Element | null {
               <div className="flex border-b border-border relative">
                 <button
                   onClick={() => setActiveTab('download')}
-                  className={`flex-1 pb-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${activeTab === 'download' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                  className={`flex-1 pb-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${activeTab === 'download' ? 'text-primary' : 'text-muted-subtle hover:text-muted'}`}
                 >
-                  <ImageIcon size={16} /> Assets
+                  <ImageIcon size={16} /> {t('sidebar.assets')}
                 </button>
                 <button
                   onClick={() => setActiveTab('code')}
-                  className={`flex-1 pb-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${activeTab === 'code' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                  className={`flex-1 pb-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${activeTab === 'code' ? 'text-primary' : 'text-muted-subtle hover:text-muted'}`}
                 >
-                  <FileCode size={16} /> Code
+                  <FileCode size={16} /> {t('sidebar.code')}
                 </button>
 
                 <div
-                  className="absolute bottom-0 h-0.5 bg-white transition-all duration-300"
+                  className="absolute bottom-0 h-0.5 bg-primary transition-all duration-300"
                   style={{
                     left: activeTab === 'download' ? '0%' : '50%',
                     width: '50%'
@@ -217,13 +220,13 @@ export function Sidebar(): JSX.Element | null {
                       key={fmt}
                       onClick={() => handleDownload(fmt)}
                       disabled={!!isProcessing}
-                      className="group w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900 hover:border-zinc-700 active:scale-[0.98] transition-all duration-200 outline-none focus:ring-1 focus:ring-zinc-600"
+                      className="group w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border bg-surface/30 hover:bg-surface hover:border-border-subtle active:scale-[0.98] transition-all duration-200 outline-none focus:ring-1 focus:ring-ring"
                     >
-                      <span className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors">
+                      <span className="text-sm font-medium text-muted group-hover:text-primary transition-colors">
                         {fmt}
                       </span>
 
-                      <div className="text-zinc-600 group-hover:text-white transition-colors">
+                      <div className="text-dim group-hover:text-primary transition-colors">
                         {isProcessing === fmt ? (
                           <Loader2 size={18} className="animate-spin" />
                         ) : (
@@ -243,8 +246,8 @@ export function Sidebar(): JSX.Element | null {
                         className={`
                           py-2 text-[10px] sm:text-xs font-medium rounded-lg border transition-all duration-200
                           ${codeFormat === fmt
-                            ? 'bg-white text-black border-white shadow-lg shadow-white/10'
-                            : 'bg-transparent text-zinc-400 border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900'}
+                            ? 'bg-accent-bg text-accent-text border-accent-bg shadow-lg'
+                            : 'bg-transparent text-muted border-border hover:border-border-subtle hover:bg-surface'}
                         `}
                       >
                         {fmt}
@@ -253,28 +256,28 @@ export function Sidebar(): JSX.Element | null {
                   </div>
 
                   <div
-                    className="relative group cursor-pointer overflow-hidden rounded-lg border border-border bg-zinc-950"
+                    className="relative group cursor-pointer overflow-hidden rounded-lg border border-border bg-elevated"
                     onClick={handleCopy}
                   >
-                    <pre className="p-4 font-mono text-xs text-zinc-300 overflow-x-auto h-64 custom-scrollbar leading-relaxed">
+                    <pre className="p-4 font-mono text-xs text-muted overflow-x-auto h-64 custom-scrollbar leading-relaxed">
                       <code>{generatedCode}</code>
                     </pre>
 
                     <div className={`
-                        absolute inset-0 bg-zinc-950/80 backdrop-blur-[2px]
+                        absolute inset-0 bg-elevated/80 backdrop-blur-[2px]
                         flex items-center justify-center gap-2
                         transition-opacity duration-200
-                        ${copied ? 'opacity-100 bg-emerald-950/80' : 'opacity-0 group-hover:opacity-100'}
+                        ${copied ? 'opacity-100 bg-emerald-500/20' : 'opacity-0 group-hover:opacity-100'}
                     `}>
                       {copied ? (
                         <>
                           <Check size={20} className="text-emerald-500" />
-                          <span className="text-emerald-500 font-semibold">Copied!</span>
+                          <span className="text-emerald-500 font-semibold">{t('common.copied')}</span>
                         </>
                       ) : (
                         <>
-                          <Copy size={20} className="text-white" />
-                          <span className="text-white font-semibold">Click to copy</span>
+                          <Copy size={20} className="text-primary" />
+                          <span className="text-primary font-semibold">{t('common.clickToCopy')}</span>
                         </>
                       )}
                     </div>
@@ -285,12 +288,12 @@ export function Sidebar(): JSX.Element | null {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-zinc-500">
-          <div className="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mb-4 ring-1 ring-zinc-800">
+        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-muted-subtle">
+          <div className="w-16 h-16 rounded-full bg-surface flex items-center justify-center mb-4 ring-1 ring-border">
             <LayoutGrid size={24} className="opacity-50" />
           </div>
-          <p className="text-sm font-medium text-zinc-400">No logo selected</p>
-          <p className="text-xs text-zinc-600 mt-1">Select an item from the grid to view details</p>
+          <p className="text-sm font-medium text-muted">{t('sidebar.noLogoSelected')}</p>
+          <p className="text-xs text-dim mt-1">{t('sidebar.selectFromGrid')}</p>
         </div>
       )}
     </aside>

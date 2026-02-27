@@ -1,0 +1,63 @@
+{
+  "common": {
+    "download": "تحميل",
+    "copied": "تم النسخ!",
+    "back": "رجوع",
+    "clickToCopy": "انقر للنسخ",
+    "screens": "شاشات",
+    "noScreenshots": "لا توجد لقطات شاشة",
+    "community": "المجتمع"
+  },
+  "navbar": {
+    "logos": "الشعارات",
+    "apps": "التطبيقات",
+    "searchLogos": "ابحث عن شعار...",
+    "searchApps": "ابحث عن تطبيق...",
+    "contribute": "ساهم معنا"
+  },
+  "home": {
+    "title": "مكتبة الشعارات",
+    "description": "مجموعة شعارات للمصارف الليبية وطرق الدفع. متوفرة بنسخ أحادية اللون وملونة ورمزية.",
+    "banks": "المصارف",
+    "paymentMethods": "طرق الدفع",
+    "mono": "أحادي",
+    "branded": "ملون",
+    "logomark": "رمز",
+    "size": "الحجم"
+  },
+  "apps": {
+    "title": "معرض واجهات التطبيقات",
+    "description": "استكشف أنماط واجهات المستخدم من التطبيقات المصرفية الليبية. لقطات شاشة مختارة للبحث والإلهام.",
+    "noAppsFound": "لم يتم العثور على تطبيقات مطابقة لبحثك.",
+    "noScreenshotsBank": "لا توجد لقطات شاشة لهذا المصرف."
+  },
+  "sidebar": {
+    "details": "التفاصيل",
+    "assets": "الملفات",
+    "code": "الكود",
+    "noLogoSelected": "لم يتم اختيار شعار",
+    "selectFromGrid": "اختر عنصرًا من الشبكة لعرض التفاصيل",
+    "downloadAll": "تحميل الكل",
+    "zipping": "جاري الضغط...",
+    "downloadFailed": "تعذر تحويل الصورة. جرب التحميل كـ SVG.",
+    "downloadImageFailed": "فشل تحميل الصورة.",
+    "zipFailed": "فشل إنشاء ملف مضغوط."
+  },
+  "contributors": {
+    "contributors": "المساهمون",
+    "dontLoseThis": "لا تفقد هذا الموقع",
+    "bookmarkDescription": "قد تكون هذه آخر مرة نلتقي فيها. احفظ الموقع وأضفه للمفضلة الآن لضمان وصولك الدائم لهذه الموارد.",
+    "tapShare": "اضغط على أيقونة المشاركة للحفظ",
+    "missingSomething": "هل ينقص شيء؟",
+    "contributeDescription": "لاحظت مصرفًا مفقودًا أو شعارًا قديمًا؟ كن مساهمًا وأضفه إلى المجموعة.",
+    "becomeContributor": "كن مساهمًا"
+  },
+  "badge": {
+    "new": "جديد",
+    "updated": "محدّث"
+  },
+  "figma": {
+    "figma": "Figma",
+    "viewOnFigma": "عرض في Figma"
+  }
+}

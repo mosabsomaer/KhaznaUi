@@ -1,4 +1,5 @@
 import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface BadgeProps {
   type: 'new' | 'updated';
@@ -6,11 +7,13 @@ interface BadgeProps {
 }
 
 export function Badge({ type, className = '' }: BadgeProps): JSX.Element {
-  const styles = type === 'new'
-    ? 'bg-zinc-100 text-zinc-950 border-zinc-200 font-semibold'
-    : 'bg-zinc-800 text-zinc-300 border-zinc-700';
+  const { t } = useTranslation();
 
-  const label = type === 'new' ? 'New' : 'Updated';
+  const styles = type === 'new'
+    ? 'bg-accent-bg text-accent-text border-border font-semibold'
+    : 'bg-surface-hover text-muted border-border-subtle';
+
+  const label = type === 'new' ? t('badge.new') : t('badge.updated');
 
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border ${styles} ${className}`}>

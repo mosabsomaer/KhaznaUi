@@ -3,7 +3,7 @@
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
-  background: #3f3f46;
+  background: var(--color-slider-track);
   border-radius: 999px;
   outline: none;
   cursor: pointer;
@@ -15,7 +15,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--color-slider-thumb);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   transition: transform 0.15s ease;
@@ -29,7 +29,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--color-slider-thumb);
   cursor: pointer;
   border: none;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -37,6 +37,35 @@
 
 .range-slider::-moz-range-track {
   height: 6px;
-  background: #3f3f46;
+  background: var(--color-slider-track);
   border-radius: 999px;
+}
+
+/* Slide-block theme transition */
+.slide-block {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  transform: translateY(100%);
+}
+
+.slide-block.phase-cover {
+  pointer-events: all;
+  animation: slide-cover 0.35s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+.slide-block.phase-reveal {
+  pointer-events: all;
+  animation: slide-reveal 0.35s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+@keyframes slide-cover {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes slide-reveal {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100%); }
 }

@@ -1,0 +1,16 @@
+import type { JSX } from 'react';
+import { Sun, Moon } from 'lucide-react';
+import { useUIContext } from '../hooks/useUIContext';
+
+export function ThemeToggle(): JSX.Element {
+  const { theme, toggleTheme } = useUIContext();
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className="p-2 text-muted hover:text-primary hover:bg-surface-hover rounded-full transition-colors"
+    >
+      {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+    </button>
+  );
+}

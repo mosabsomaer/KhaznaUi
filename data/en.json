@@ -1,0 +1,63 @@
+{
+  "common": {
+    "download": "Download",
+    "copied": "Copied!",
+    "back": "Back",
+    "clickToCopy": "Click to copy",
+    "screens": "Screens",
+    "noScreenshots": "No screenshots available",
+    "community": "Community"
+  },
+  "navbar": {
+    "logos": "Logos",
+    "apps": "Apps",
+    "searchLogos": "Search logos...",
+    "searchApps": "Search apps...",
+    "contribute": "Contribute"
+  },
+  "home": {
+    "title": "Logo Library",
+    "description": "A collection of logos for Libyan banks and payment methods. Available in mono, branded, and logomark variants.",
+    "banks": "Banks",
+    "paymentMethods": "Payment Methods",
+    "mono": "Mono",
+    "branded": "Branded",
+    "logomark": "Logomark",
+    "size": "size"
+  },
+  "apps": {
+    "title": "App UI Gallery",
+    "description": "Explore user interface patterns from real Libyan banking applications. Curated screenshots for research and inspiration.",
+    "noAppsFound": "No apps found matching your search.",
+    "noScreenshotsBank": "No screenshots available for this bank."
+  },
+  "sidebar": {
+    "details": "Details",
+    "assets": "Assets",
+    "code": "Code",
+    "noLogoSelected": "No logo selected",
+    "selectFromGrid": "Select an item from the grid to view details",
+    "downloadAll": "Download All",
+    "zipping": "Zipping...",
+    "downloadFailed": "Could not convert image. Try downloading as SVG.",
+    "downloadImageFailed": "Failed to download image.",
+    "zipFailed": "Failed to create zip file."
+  },
+  "contributors": {
+    "contributors": "Contributors",
+    "dontLoseThis": "Don't lose this",
+    "bookmarkDescription": "This might be the last time we meet. Save the website and bookmark it now to ensure you always have access to these assets.",
+    "tapShare": "Tap share icon to bookmark",
+    "missingSomething": "Missing something?",
+    "contributeDescription": "Notice a missing bank or outdated logo? Become a contributor and add it to the collection.",
+    "becomeContributor": "Become a contributor"
+  },
+  "badge": {
+    "new": "New",
+    "updated": "Updated"
+  },
+  "figma": {
+    "figma": "Figma",
+    "viewOnFigma": "View on Figma"
+  }
+}

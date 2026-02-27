@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "i18next": "^25.8.13",
     "jszip": "3.10.1",
     "lucide-react": "0.436.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-i18next": "^16.5.4",
     "react-router": "6.26.1",
     "react-router-dom": "6.26.1"
   },

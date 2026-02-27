@@ -3,6 +3,7 @@ import type { JSX } from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, ZoomIn, Download, X, Loader2, DownloadCloud, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { BANKS, MOCK_SCREENSHOTS } from '../constants';
 import { Screenshot } from '../types';
 import JSZip from 'jszip';
@@ -11,6 +12,7 @@ import { FigmaLink } from '../components/FigmaLink';
 
 export function AppDetailPage(): JSX.Element {
   const { bankId } = useParams<{ bankId: string }>();
+  const { t } = useTranslation();
   const [selectedScreen, setSelectedScreen] = useState<Screenshot | null>(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
   const [isDownloadingSingle, setIsDownloadingSingle] = useState(false);
@@ -57,11 +59,11 @@ export function AppDetailPage(): JSX.Element {
       downloadBlob(blob, filename);
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Failed to download image.');
+      alert(t('sidebar.downloadImageFailed'));
     } finally {
       setIsDownloadingSingle(false);
     }
-  }, [bank]);
+  }, [bank, t]);
 
   const handleDownloadAll = useCallback(async () => {
     if (!bank || screenshots.length === 0) return;
@@ -89,11 +91,11 @@ export function AppDetailPage(): JSX.Element {
       downloadBlob(content, zipName);
     } catch (error) {
       console.error('Batch download failed:', error);
-      alert('Failed to create zip file.');
+      alert(t('sidebar.zipFailed'));
     } finally {
       setIsDownloadingAll(false);
     }
-  }, [bank, screenshots]);
+  }, [bank, screenshots, t]);
 
   if (!bank) {
     return <Navigate to="/apps" replace />;
@@ -107,21 +109,21 @@ export function AppDetailPage(): JSX.Element {
           <div className="flex items-center gap-4">
             <Link
               to="/apps"
-              className="w-10 h-10 flex items-center justify-center rounded-full border border-border hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-white"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-border hover:bg-surface-hover transition-colors text-muted hover:text-primary"
             >
-              <ArrowLeft size={20} />
+              <ArrowLeft size={20} className="rtl:rotate-180" />
             </Link>
             <div className="flex items-center gap-3">
-              <img src={bank.logoUrl} alt={bank.name} className="w-10 h-10 rounded-lg bg-zinc-900 object-cover" />
+              <img src={bank.logoUrl} alt={bank.name} className="w-10 h-10 rounded-lg bg-surface object-cover" />
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-xl font-bold text-white">{bank.name}</h1>
+                  <h1 className="text-xl font-bold text-primary">{bank.name}</h1>
                   {bank.figmaUrl && (
-                    <FigmaLink href={bank.figmaUrl} tooltipPosition="top" className="bg-zinc-900" />
+                    <FigmaLink href={bank.figmaUrl} tooltipPosition="top" className="bg-surface" />
                   )}
                 </div>
-                <div className="flex items-center gap-2 text-xs text-zinc-500 mt-1">
-                  <span>{screenshots.length} Screens</span>
+                <div className="flex items-center gap-2 text-xs text-muted-subtle mt-1">
+                  <span>{screenshots.length} {t('common.screens')}</span>
 
                   {screenshots.length > 0 && (
                     <>
@@ -129,14 +131,14 @@ export function AppDetailPage(): JSX.Element {
                       <button
                         onClick={handleDownloadAll}
                         disabled={isDownloadingAll}
-                        className="flex items-center gap-1 text-zinc-300 hover:text-white hover:underline disabled:opacity-50 disabled:no-underline disabled:cursor-not-allowed transition-colors"
+                        className="flex items-center gap-1 text-muted hover:text-primary hover:underline disabled:opacity-50 disabled:no-underline disabled:cursor-not-allowed transition-colors"
                       >
                         {isDownloadingAll ? (
                           <Loader2 size={10} className="animate-spin" />
                         ) : (
                           <DownloadCloud size={12} />
                         )}
-                        {isDownloadingAll ? 'Zipping...' : 'Download All'}
+                        {isDownloadingAll ? t('sidebar.zipping') : t('sidebar.downloadAll')}
                       </button>
                     </>
                   )}
@@ -154,7 +156,7 @@ export function AppDetailPage(): JSX.Element {
             <div key={screen.id} className="group flex flex-col gap-3">
               <button
                 onClick={() => setSelectedScreen(screen)}
-                className="relative aspect-[9/19] w-full rounded-2xl overflow-hidden border border-border bg-zinc-900 cursor-pointer outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-zinc-950"
+                className="relative aspect-[9/19] w-full rounded-2xl overflow-hidden border border-border bg-surface cursor-pointer outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
               >
                 <img
                   src={screen.url}
@@ -164,25 +166,25 @@ export function AppDetailPage(): JSX.Element {
                 />
 
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="p-3 bg-zinc-900/80 rounded-full text-white shadow-xl transform scale-90 group-hover:scale-100 transition-all duration-300">
+                  <div className="p-3 bg-black/60 rounded-full text-white shadow-xl transform scale-90 group-hover:scale-100 transition-all duration-300">
                     <ZoomIn size={20} />
                   </div>
                 </div>
               </button>
               <div className="text-center">
-                <h3 className="text-sm font-medium text-zinc-300">{screen.label}</h3>
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">{screen.category}</p>
+                <h3 className="text-sm font-medium text-muted">{screen.label}</h3>
+                <p className="text-[10px] text-muted-subtle uppercase tracking-wider mt-0.5">{screen.category}</p>
               </div>
             </div>
           ))
         ) : (
-          <div className="col-span-full py-20 text-center text-zinc-500">
-            No screenshots available for this bank.
+          <div className="col-span-full py-20 text-center text-muted-subtle">
+            {t('apps.noScreenshotsBank')}
           </div>
         )}
       </div>
 
-      {/* Lightbox */}
+      {/* Lightbox - stays dark in both modes */}
       {selectedScreen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm animate-in fade-in duration-200"
@@ -190,21 +192,21 @@ export function AppDetailPage(): JSX.Element {
         >
           <button
             onClick={(e) => { e.stopPropagation(); navigateLightbox('prev'); }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 text-zinc-400 hover:text-white bg-zinc-800/50 hover:bg-zinc-800 rounded-full transition-colors z-50 hidden md:block"
+            className="absolute start-4 top-1/2 -translate-y-1/2 p-3 text-zinc-400 hover:text-white bg-zinc-800/50 hover:bg-zinc-800 rounded-full transition-colors z-50 hidden md:block"
           >
-            <ChevronLeft size={32} />
+            <ChevronLeft size={32} className="rtl:rotate-180" />
           </button>
 
           <button
             onClick={(e) => { e.stopPropagation(); navigateLightbox('next'); }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 text-zinc-400 hover:text-white bg-zinc-800/50 hover:bg-zinc-800 rounded-full transition-colors z-50 hidden md:block"
+            className="absolute end-4 top-1/2 -translate-y-1/2 p-3 text-zinc-400 hover:text-white bg-zinc-800/50 hover:bg-zinc-800 rounded-full transition-colors z-50 hidden md:block"
           >
-            <ChevronRight size={32} />
+            <ChevronRight size={32} className="rtl:rotate-180" />
           </button>
 
           <button
             onClick={(e) => { e.stopPropagation(); setSelectedScreen(null); }}
-            className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white bg-zinc-800/50 hover:bg-zinc-800 rounded-full transition-colors z-50"
+            className="absolute top-4 end-4 p-2 text-zinc-400 hover:text-white bg-zinc-800/50 hover:bg-zinc-800 rounded-full transition-colors z-50"
           >
             <X size={24} />
           </button>
@@ -233,7 +235,7 @@ export function AppDetailPage(): JSX.Element {
                   className="flex items-center gap-2 px-3 py-1.5 bg-white text-black text-xs font-bold rounded-full hover:bg-zinc-200 transition-colors disabled:opacity-50"
                 >
                   {isDownloadingSingle ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
-                  Download
+                  {t('common.download')}
                 </button>
               </div>
             </div>

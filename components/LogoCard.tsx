@@ -20,12 +20,12 @@ export function LogoCard({ item }: LogoCardProps): JSX.Element {
         className={`
           relative w-full aspect-square flex flex-col items-center justify-center p-6
           border rounded-xl transition-all duration-200
-          hover:bg-zinc-900/50
-          ${isSelected ? 'border-zinc-500 ring-1 ring-zinc-500 bg-zinc-900' : 'border-border bg-background hover:border-zinc-600'}
+          hover:bg-surface/50
+          ${isSelected ? 'border-muted-subtle ring-1 ring-muted-subtle bg-surface' : 'border-border bg-background hover:border-border-subtle'}
         `}
       >
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute top-3 start-3 flex gap-2">
           {item.isNew && <Badge type="new" />}
           {item.isUpdated && !item.isNew && <Badge type="updated" />}
         </div>
@@ -40,7 +40,7 @@ export function LogoCard({ item }: LogoCardProps): JSX.Element {
         </div>
       </button>
 
-      <span className="text-sm font-medium text-zinc-400 group-hover:text-zinc-100 transition-colors text-center px-1">
+      <span className="text-sm font-medium text-muted group-hover:text-primary transition-colors text-center px-1">
         {item.name}
       </span>
     </div>
