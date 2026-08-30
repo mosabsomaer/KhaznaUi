@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { BANKS, PAYMENT_GATEWAYS, PAYMENT_METHODS } from "../constants";
 import { useSound } from "../hooks/useSound";
 import { useUIContext } from "../hooks/useUIContext";
+import i18n from "../i18n";
 import type { Bank, PaymentGateway, PaymentMethod } from "../types";
 
 type SearchResult =
@@ -13,27 +14,54 @@ type SearchResult =
 			id: string;
 			kind: "logo";
 			item: Bank | PaymentMethod | PaymentGateway;
+			searchText: string;
 	  }
 	| {
 			id: string;
 			kind: "app";
 			item: Bank;
+			searchText: string;
 	  };
 
+const SEARCH_LANGUAGES = ["en", "ar"];
+
+/** Arabic diacritics and tatweel, dropped so "مَصرف" and "مصــرف" both match "مصرف". */
+const ARABIC_MARKS = /[ؐ-ًؚ-ٰٟۖ-ۭـ]/g;
+
+function normalizeSearchValue(value: string): string {
+	return value
+		.toLowerCase()
+		.replace(ARABIC_MARKS, "")
+		.replace(/[أإآٱ]/g, "ا")
+		.replace(/ى/g, "ي")
+		.replace(/ة/g, "ه")
+		.replace(/\s+/g, " ")
+		.trim();
+}
+
+/** Names from every language, so a query matches regardless of the active locale. */
+function buildSearchText(item: Bank | PaymentMethod | PaymentGateway, kind: string): string {
+	const names = SEARCH_LANGUAGES.map((lng) =>
+		i18n.getResource(lng, "translation", `entityNames.${item.id}`),
+	).filter((name): name is string => typeof name === "string");
+
+	return normalizeSearchValue([item.name, ...names, item.id, kind].join(" "));
+}
+
 const SEARCHABLE_ITEMS: SearchResult[] = [
-	...BANKS.map((item) => ({ id: `logo-${item.id}`, kind: "logo" as const, item })),
-	...PAYMENT_METHODS.map((item) => ({ id: `logo-${item.id}`, kind: "logo" as const, item })),
-	...PAYMENT_GATEWAYS.map((item) => ({ id: `logo-${item.id}`, kind: "logo" as const, item })),
+	...[...BANKS, ...PAYMENT_METHODS, ...PAYMENT_GATEWAYS].map((item) => ({
+		id: `logo-${item.id}`,
+		kind: "logo" as const,
+		item,
+		searchText: buildSearchText(item, "logo"),
+	})),
 	...BANKS.filter((item) => item.hasScreenshots).map((item) => ({
 		id: `app-${item.id}`,
 		kind: "app" as const,
 		item,
+		searchText: buildSearchText(item, "app"),
 	})),
 ];
-
-function normalizeSearchValue(value: string): string {
-	return value.toLowerCase().replace(/\s+/g, " ").trim();
-}
 
 export function SearchDialog(): JSX.Element | null {
 	const { t } = useTranslation();
@@ -78,14 +106,11 @@ export function SearchDialog(): JSX.Element | null {
 		const normalizedQuery = normalizeSearchValue(query);
 		if (!normalizedQuery) return SEARCHABLE_ITEMS.slice(0, 12);
 
-		return SEARCHABLE_ITEMS.filter((result) => {
-			const translatedName = t(`entityNames.${result.item.id}`);
-			const searchText = normalizeSearchValue(
-				[result.item.name, translatedName, result.item.id, result.kind].join(" "),
-			);
-			return searchText.includes(normalizedQuery);
-		}).slice(0, 12);
-	}, [query, t]);
+		return SEARCHABLE_ITEMS.filter((result) => result.searchText.includes(normalizedQuery)).slice(
+			0,
+			12,
+		);
+	}, [query]);
 
 	function handleClose(): void {
 		play("tap");
