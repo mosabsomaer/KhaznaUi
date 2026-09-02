@@ -225,7 +225,16 @@
 		"List": "List",
 		"More": "More",
 		"Check": "Check",
-		"Don't Count It": "Don't Count It"
+		"Don't Count It": "Don't Count It",
+		"Get Started": "Get Started",
+		"Services": "Services",
+		"Select Recipient": "Select Recipient",
+		"Transfer Amount": "Transfer Amount",
+		"Transfer Confirmation": "Transfer Confirmation",
+		"Transfer Processing": "Transfer Processing",
+		"Transfer Success": "Transfer Success",
+		"Transfer Receipt": "Transfer Receipt",
+		"Statement Request": "Statement Request"
 	},
 	"screenshotCategories": {
 		"onboarding": "Onboarding",

@@ -225,7 +225,16 @@
 		"List": "القائمة",
 		"More": "المزيد",
 		"Check": "صك",
-		"Don't Count It": "لا تحسبها"
+		"Don't Count It": "لا تحسبها",
+		"Get Started": "ابدأ",
+		"Services": "الخدمات",
+		"Select Recipient": "اختيار المستلم",
+		"Transfer Amount": "قيمة التحويل",
+		"Transfer Confirmation": "تأكيد التحويل",
+		"Transfer Processing": "جارٍ تنفيذ التحويل",
+		"Transfer Success": "اكتمال التحويل",
+		"Transfer Receipt": "إيصال التحويل",
+		"Statement Request": "طلب كشف"
 	},
 	"screenshotCategories": {
 		"onboarding": "البدء",
